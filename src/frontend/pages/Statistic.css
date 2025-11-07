@@ -1,0 +1,235 @@
+.bodyStatistic {
+  font-family: Arial, sans-serif;
+  background-color: #eef;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 98vh;
+}
+
+.sidebarhome {
+  width: 117px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 1.8vh 20px;
+  padding: 20px;
+  height: 90vh;
+  border-radius: 10px;
+}
+
+.sidebarhome .logo {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 30px;
+  height: 30px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 15px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.nav-btn.user {
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
+.sidebarhome button:hover {
+  background-color: blueviolet;
+  border-radius: 8px;
+}
+
+.sidebarhome button:active {
+  background-color: blueviolet;
+}
+
+/* Grid layout cho 3 biểu đồ */
+.mainStatistic {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 40px 0 0 40px;
+  box-sizing: border-box;
+  padding-top: 10px; /* khoảng cách từ trên xuống */
+}
+
+.statistic-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 32px; /* khoảng cách ngang giữ nguyên */
+  row-gap: 0px; /* khoảng cách dọc giữa các hàng */
+  width: 100%;
+  height: 85%;
+  padding: 32px;
+}
+
+.statistic-cell {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  min-height: 320px;
+  min-width: 340px;
+  height: 340px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 24px 24px 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.statistic-cell canvas,
+.statistic-cell .chartjs-render-monitor {
+  max-height: 220px;
+  width: 100% !important;
+  height: auto !important;
+  margin: 0 auto;
+  display: block;
+}
+
+/* Cho line chart chiếm toàn bộ hàng dưới */
+.statistic-cell-wide {
+  grid-column: 1 / -1;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  margin-top: 32px;
+  padding: 24px 36px 32px 36px;
+  height: 320px;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+
+.statistic-cell-wide:hover {
+  box-shadow: 0 4px 24px rgba(57, 73, 171, 0.1);
+}
+
+.chart-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 18px 0;
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: #333;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.calendar-btn:hover {
+  background: #f4f6fb;
+}
+
+.statistic-cell-wide canvas,
+.statistic-cell-wide .chartjs-render-monitor {
+  width: 100% !important;
+  height: 320px !important;
+  max-height: 340px;
+  margin: 0 auto;
+  display: block;
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .statistic-cell-wide {
+    padding: 12px 6px 18px 6px;
+    height: 320px;
+  }
+  .chart-header {
+    padding: 0 0 10px 0;
+  }
+}
+
+.statistic-cell .legend {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  padding-bottom: 0;
+}
+
+.chart-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 8px 0;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.chart-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

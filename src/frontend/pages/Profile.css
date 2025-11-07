@@ -1,0 +1,145 @@
+.bodyProfile {
+  font-family: Arial, sans-serif;
+  background-color: #eef;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 98vh;
+}
+
+/*sidebar*/
+.sidebarhome {
+  width: 117px; /* tăng chiều rộng để chứa thêm chữ */
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 1.8vh 20px;
+  padding: 20px;
+  height: 90vh;
+  border-radius: 10px;
+}
+
+.sidebarhome .logo {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 30px;
+  height: 30px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 15px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.nav-btn.user {
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
+.sidebarhome button:hover {
+  background-color: blueviolet;
+  border-radius: 8px;
+}
+
+.sidebarhome button:active {
+  background-color: blueviolet;
+}
+
+/*Section Chính*/
+section {
+  width: 60%; /* Giới hạn chiều rộng */
+  max-width: 1000px; /* Không cho quá lớn trên màn hình rộng */
+  height: 90vh; /* Chiều cao vừa phải */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  margin: auto; /* Căn giữa ngang */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.imageProfile {
+  width: 200px;
+  height: 200px;
+  margin-top: 40px;
+}
+
+.profile-options {
+  display: flex;
+  flex-direction: column; /* Xếp theo chiều dọc */
+  align-items: flex-start; /* Căn chữ thẳng hàng bên trái */
+  justify-content: center; /* Căn giữa theo chiều dọc */
+  height: 100%;
+}
+
+.profile-option {
+  display: flex;
+  align-items: center; /* Căn chữ và ô vuông theo hàng ngang */
+  margin-bottom: 50px; /* Khoảng cách giữa các dòng */
+}
+
+.profile-option::before {
+  content: ""; /* Tạo ô vuông giả */
+  width: 35px;
+  height: 35px;
+  background-color: #d3d3d3; /* Màu xám nhạt */
+  display: inline-block;
+  margin-right: 10px; /* Khoảng cách giữa ô vuông và chữ */
+  border-radius: 10px; /* Làm bo góc một chút */
+}
+
+.profile-options button {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+/*Không thích thì xóa*/
+.profile-options button:hover {
+  color: red; /* Chuyển sang màu đỏ */
+  text-decoration: underline; /* Gạch chân */
+}

@@ -1,0 +1,371 @@
+.bodyAI {
+  font-family: Arial, sans-serif;
+  background-color: #eef;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 98vh;
+}
+
+/*sidebar*/
+.sidebarhome {
+  width: 117px; /* tăng chiều rộng để chứa thêm chữ */
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 1.8vh 20px;
+  padding: 20px;
+  height: 90vh;
+  border-radius: 10px;
+}
+
+.sidebarhome .logo {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 30px;
+  height: 30px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 15px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.nav-btn.user {
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
+.sidebarhome button:hover {
+  background-color: blueviolet;
+  border-radius: 8px;
+}
+
+.sidebarhome button:active {
+  background-color: blueviolet;
+}
+
+/*sidebar*/
+
+/* Section chính */
+section {
+  width: 70%; /* Giới hạn chiều rộng */
+  max-width: 1000px; /* Không cho quá lớn trên màn hình rộng */
+  height: 90vh; /* Chiều cao vừa phải */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  margin: auto; /* Căn giữa ngang */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Cửa sổ chat */
+.chat-window {
+  flex-grow: 1;
+  width: 100%;
+  background: #f5f5ff;
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Input chat */
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 80vh; /* Hoặc chiều cao cố định như 600px */
+  max-width: 800px;
+  margin: 0 auto;
+  background: #f5f5f5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Phần tin nhắn (cuộn độc lập) */
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Phần input (cố định ở dưới) */
+.input-area {
+  padding: 15px 20px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Input box */
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 25px;
+  padding: 8px 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input-box {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.in-chat-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Tùy chỉnh thanh cuộn */
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+/* Ô nhập tin nhắn */
+.chat-input-box {
+  flex-grow: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  background: #f5f5ff;
+}
+
+.in-chat-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.chat-icon {
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.in-chat-button:hover .chat-icon {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Responsive - Điều chỉnh kích thước trên màn hình nhỏ */
+@media (max-width: 768px) {
+  section {
+    width: 90%; /* Giảm kích thước trên màn hình nhỏ */
+    height: 80vh; /* Cao hơn một chút */
+  }
+
+  .chat-window {
+    padding: 10px;
+  }
+
+  .chat-input-box {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* ChatBot */
+
+.message {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: flex-start;
+}
+
+.avatar {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.text {
+  padding: 10px 15px;
+  border-radius: 18px;
+  max-width: 70%;
+}
+
+/* Tin nhắn bot */
+.bot-message .text {
+  background: #e3f2fd;
+  color: #000;
+}
+
+/* Tin nhắn người dùng */
+.user-message {
+  justify-content: flex-end;
+}
+
+.user-message .text {
+  background: #007bff;
+  color: white;
+}
+
+.suggestions-container {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  overflow-x: auto;
+  margin-bottom: 10px;
+  justify-content: flex-end; /* Lệch sang phải */
+}
+
+.suggestion-bubble {
+  background: #e3f2fd;
+  color: #007bff;
+  padding: 8px 12px;
+  border-radius: 18px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border: 1px solid #bbdefb;
+}
+
+.suggestion-bubble:hover {
+  background: #bbdefb;
+  transform: translateY(-2px);
+}
+
+/* Ẩn thanh cuộn nhưng vẫn cuộn được */
+.suggestions-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ⚙️ Layout tổng thể */
+.chat_container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background-color: #f0f2f5;
+}
+
+/* ===== Sidebar Lịch sử Chat ===== */
+
+.chat-history-sessions {
+  width: 280px;
+  background-color: #f5f5ff; /* nền nhẹ cùng tone */
+  color: #333;
+  padding: 20px 15px;
+  overflow-y: auto;
+  border-right: 1px solid #dcdcdc;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-history-sessions h4 {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #007bff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Nút tạo phiên mới */
+.new-session-btn {
+  background-color: #ffffff;
+  color: #007bff;
+  border: 1px solid #bbdefb;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+}
+
+.new-session-btn:hover {
+  background-color: #e3f2fd;
+}
+
+/* Danh sách session */
+.chat-session-item {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  text-align: left;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+}
+
+.chat-session-item:hover {
+  background-color: #e3f2fd;
+}
+
+.chat-session-item.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: 600;
+}
+
+/* Thời gian phiên */
+.chat-session-item small {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* Scrollbar đẹp */
+.chat-history-sessions::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-history-sessions::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}

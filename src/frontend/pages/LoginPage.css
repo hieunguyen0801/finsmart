@@ -1,0 +1,122 @@
+/* Toàn trang: có thể tuỳ ý thêm background hoặc gradient */
+.login-page-card {
+  font-family: sans-serif;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 0;
+}
+
+/* Container căn giữa dọc + ngang */
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 150px 300px;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form tổng quan */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  /* Thêm shadow nhẹ nếu muốn */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+}
+
+/* Mỗi input-group là một khối gồm label + input */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333333;
+  font-weight: 500;
+}
+
+/* Input chung */
+.input-group input {
+  border: none;
+  background-color: #f2f3ff; /* Màu nền nhạt hơi ánh tím */
+  padding: 12px 16px;
+  border-radius: 30px; /* Bo tròn dạng "pill" */
+  font-size: 14px;
+  outline: none;
+  color: #333;
+}
+
+.input-group input::placeholder {
+  color: #bfbfbf; /* Màu placeholder xám nhạt */
+}
+
+/* Bọc input password + icon mắt */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 50px; /* Chừa khoảng cho icon bên phải */
+}
+
+/* Icon mắt để toggle password */
+.password-toggle {
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+  color: #888;
+  font-size: 18px;
+}
+
+/* Nút Đăng Nhập */
+.login-button {
+  background-color: #5a48ff; /* Màu tím đậm */
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 0;
+  font-size: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #4436cc;
+}
+
+/* Nút Đăng Ký */
+.goback-button {
+  background-color: #f2f3ff; /* Màu tím rất nhạt */
+  color: #333;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 0;
+  font-size: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.goback-button:hover {
+  background-color: #e0e2ff;
+}
+
+/* Link Quên Mật Khẩu */
+.forgot-password {
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}

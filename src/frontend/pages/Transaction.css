@@ -1,0 +1,299 @@
+.bodyadd {
+  font-family: Arial, sans-serif;
+  background-color: #eef;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 98vh;
+}
+
+/*sidebar*/
+.sidebarhome {
+  width: 120px; /* tăng chiều rộng để chứa thêm chữ */
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 1.8vh 20px;
+  padding: 20px;
+  height: 90vh;
+  border-radius: 10px;
+}
+
+.sidebarhome .logo {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 30px;
+  height: 30px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 15px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 8px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.nav-btn.user {
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
+.sidebarhome button:hover {
+  background-color: blueviolet;
+  border-radius: 8px;
+}
+
+.sidebarhome button:active {
+  background-color: blueviolet;
+}
+
+/* Main Layout */
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 98vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 20px;
+  max-width: 1000px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Thu Tien Chi Tien */
+.categories {
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  border: solid 1px #e0e0e0;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 1000px;
+  box-sizing: border-box;
+  align-self: flex-start;
+}
+
+.categories button {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.categories button:hover,
+.categories button:active,
+.categories button.active {
+  background-color: blueviolet;
+  border-radius: 8px;
+}
+
+.mic-button {
+  background: none;
+  border: none;
+}
+.head-button {
+  display: flex;
+}
+
+/* Nhap so tien */
+.input {
+  width: 97%;
+  padding: 15px;
+  font-size: 24px;
+  border: solid 1px #e0e0e0;
+  text-align: left;
+  background: white;
+  margin-bottom: 2vh;
+  border-radius: 15px;
+  color: #6c63ff;
+  font-weight: bold;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Chon Danh Muc */
+.select-categoryies {
+  display: flex;
+  flex-direction: column;
+  background: #f5f5ff;
+  padding: 10px;
+  border-radius: 10px;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 5vh;
+}
+
+.category-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+.limit-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  max-height: 15vh;
+  overflow-y: auto;
+  padding-right: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.limit-row::-webkit-scrollbar {
+  width: 6px;
+}
+.limit-row::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.category,
+.limit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 15px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: 0.2s;
+  font-weight: bold;
+  margin-bottom: 2vh;
+}
+
+.category:hover,
+.limit:hover,
+.category.active,
+.limit.active {
+  background: #6c63ff;
+  color: white;
+}
+
+.input-container {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 2vh;
+}
+
+.note-input {
+  flex-grow: 1;
+  border: none;
+  background: white;
+  width: 85vh;
+}
+
+.date-picker {
+  width: 100%;
+  height: 7vh;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: gray;
+  border: none;
+  background: #f0f2ff;
+  box-sizing: border-box;
+  margin-bottom: 2vh;
+}
+
+.confirm-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.confirm {
+  width: 100%;
+  height: 6vh;
+  max-width: 1000px;
+  padding: 15px;
+  background: #6c63ff;
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.confirm:hover {
+  background: #5548cc;
+}
+
+.category.active,
+.limit.active,
+.categories button.active {
+  background-color: #5c6bc0; /* Màu nền cho nút được chọn */
+  color: white; /* Màu chữ cho nút được chọn */
+  border: 1px solid #0056b3; /* Đổi màu viền cho nút */
+}
+
+/* Khi hover vào các nút */
+.category:hover,
+.limit:hover,
+.categories button:hover {
+  background-color: #3f51b5;
+  cursor: pointer;
+}

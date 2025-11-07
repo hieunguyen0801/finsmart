@@ -1,0 +1,112 @@
+/* Toàn bộ trang lịch sử giao dịch */
+.history {
+  padding: 20px;
+  max-width: 800px; /* Làm rộng cửa sổ */
+  margin: auto;
+  text-align: center;
+  background: #eef; /* Màu nền chủ đạo */
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề */
+.history h2 {
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Bộ lọc thời gian */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.filters label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+}
+
+.filters input {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+  background: white;
+  font-size: 14px;
+}
+
+/* Danh sách giao dịch */
+.transaction-list-hist {
+  max-height: 400px; /* Làm cao hơn */
+  overflow-y: auto;
+  border-radius: 10px;
+  background: white;
+  padding: 15px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Một giao dịch */
+.transaction-hist {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  transition: 0.3s ease-in-out;
+}
+
+.transaction-hist:hover {
+  background: #f7f7ff;
+  transform: scale(1.02);
+  border-radius: 8px;
+}
+
+/* Tên giao dịch và thời gian */
+.transaction-hist p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.transaction-hist span {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Số tiền */
+.transaction-hist .positive {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.transaction-hist .negative {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+/* Nút quay về */
+.back-home {
+  display: inline-block;
+  margin: 20px auto;
+  padding: 12px 18px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s ease-in-out;
+}
+
+.back-home:hover {
+  background-color: blueviolet;
+  transform: scale(1.05);
+}
+.back-home:active {
+  background-color: blueviolet;
+  transform: scale(1.05);
+}

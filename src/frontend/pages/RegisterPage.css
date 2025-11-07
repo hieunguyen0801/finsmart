@@ -1,0 +1,124 @@
+/* Tổng thể trang */
+.register-page-card {
+  font-family: sans-serif;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 97vh;
+  padding: 0;
+}
+
+/* Container căn giữa nội dung dọc và ngang */
+.register-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 200px;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form tổng quan */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+  /* Có thể thêm shadow hoặc border nếu muốn */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+}
+
+/* Row đầu tiên: Họ và Tên - Date Of Birth (2 cột) */
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* Mỗi input-group (label + input) */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Để 2 cột cân đối */
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #333333;
+  font-weight: 500;
+}
+
+/* Style cho input chung */
+.input-group input {
+  border: none;
+  background-color: #f2f3ff; /* Màu nền tím nhạt */
+  padding: 12px 16px;
+  border-radius: 30px; /* Bo tròn dạng "pill" */
+  font-size: 14px;
+  outline: none;
+  color: #333;
+}
+
+.input-group input::placeholder {
+  color: #bfbfbf; /* Màu placeholder xám nhạt */
+}
+
+/* Password wrapper: hiển thị icon mắt ở góc phải */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 50px; /* Chừa chỗ cho icon */
+}
+
+/* Icon mắt */
+.password-toggle {
+  position: absolute;
+  right: 16px;
+  cursor: pointer;
+  color: #888;
+  font-size: 18px;
+}
+
+/* Nút Đăng Ký */
+.register-form .register-button {
+  background-color: #5a48ff; /* Màu tím đậm */
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 0;
+  font-size: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.register-form .register-button:hover {
+  background-color: #4436cc;
+}
+
+/* Nút Quay Lại */
+.back-button {
+  background-color: #f2f3ff; /* Tím rất nhạt */
+  color: #333;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 0;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.back-button:hover {
+  background-color: #e0e2ff;
+}

@@ -1,0 +1,134 @@
+/* Tổng thể trang */
+.register-page-card {
+  font-family: sans-serif;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 97vh;
+  padding: 0;
+}
+
+/* Container căn giữa nội dung */
+.register-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 120px; /* Giảm padding để form nhỏ hơn */
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form tổng quan */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  width: 420px; /* Thu nhỏ form */
+}
+
+/* Row đầu tiên: Họ và Tên - Date Of Birth */
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px; /* Giảm khoảng cách giữa các cột */
+  margin-bottom: 16px; /* Giảm khoảng cách giữa các hàng */
+}
+
+/* Mỗi input-group */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 16px; /* Giảm khoảng cách giữa các input */
+}
+
+.input-group label {
+  font-size: 14px;
+  margin-bottom: 6px; /* Giảm khoảng cách giữa label và input */
+  color: #333333;
+  font-weight: 500;
+}
+
+/* Style cho input */
+.input-group input {
+  border: none;
+  background-color: #f2f3ff;
+  padding: 10px 14px; /* Giảm padding để input nhỏ hơn */
+  border-radius: 25px; /* Bo tròn nhẹ hơn */
+  font-size: 14px;
+  outline: none;
+  color: #333;
+}
+
+.input-group input::placeholder {
+  color: #bfbfbf;
+}
+
+/* Password wrapper */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+/* Icon mắt */
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  cursor: pointer;
+  color: #888;
+  font-size: 16px;
+}
+
+/* Nút Đăng Ký */
+.register-form .register-button {
+  background-color: #5a48ff;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 0; /* Giảm chiều cao nút */
+  font-size: 15px; /* Giảm chữ một chút */
+  margin-bottom: 10px; /* Giảm khoảng cách giữa các nút */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.register-form .register-button:hover {
+  background-color: #4436cc;
+}
+
+/* Nút Quay Lại */
+.back-button {
+  background-color: #f2f3ff;
+  color: #333;
+  border: none;
+  border-radius: 25px;
+  padding: 12px 0;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.back-button:hover {
+  background-color: #e0e2ff;
+}
+
+/* Style riêng cho input type="date" để đồng bộ với input khác */
+.input-group input[type="date"] {
+  color: #bfbfbf; /* giống placeholder */
+  font-style: italic;
+}
+
+/* Khi người dùng đã chọn ngày thì đổi lại thành màu chữ bình thường */
+.input-group input[type="date"]:valid {
+  color: #333;
+  font-style: normal;
+}
