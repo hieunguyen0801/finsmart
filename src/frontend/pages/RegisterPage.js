@@ -22,16 +22,16 @@ function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const createWallet = async (username) => {
     const { data, err } = await supabase
-        .from("users")
-        .select("user_id")
-        .eq("user_name", username)
-        .single();
+      .from("users")
+      .select("user_id")
+      .eq("user_name", username)
+      .single();
 
-      if (err || !data) {
-        alert("Sai tài khoản hoặc mật khẩu!");
-        return;
-      }
-      const userId = data.user_id;
+    if (err || !data) {
+      alert("Sai tài khoản hoặc mật khẩu!");
+      return;
+    }
+    const userId = data.user_id;
     const { error } = await supabase.from("wallets").insert([
       {
         user_id: userId,
@@ -47,22 +47,22 @@ function RegisterPage() {
 
   async function handleSignUp(email, password, username, fullName, dob, phone) {
 
-    const { data: existingUser, error: checkError } = await supabase
-    .from("users")
-    .select("user_id")
-    .eq("user_name", username)
-    .single();
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("user_id")
+      .eq("user_name", username)
+      .single();
 
-  if (existingUser) {
-    alert("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
-    return;
-  }
+    if (existingUser) {
+      alert("Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác.");
+      return;
+    }
     // Băm mật khẩu với bcryptjs (10 rounds)
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(password, saltRounds);
   
     // Lưu user vào Supabase
-    const { data, error } = await supabase.from("users").insert([
+    const { error } = await supabase.from("users").insert([
       {
         email: email,
         password_hash: passwordHash,

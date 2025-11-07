@@ -55,7 +55,7 @@ const BudgetForm = ({ budget, onSave, onCancel }) => {
       setName("");
       setStartDate(new Date());
     }
-  }, [budget.limit_id]);
+  }, [budget]);
 
   return (
     <div className="edit-limit-form">

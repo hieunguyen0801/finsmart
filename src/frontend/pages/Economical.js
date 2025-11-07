@@ -42,7 +42,22 @@ function Economical() {
   }, []);
 
   useEffect(() => {
-    checkDeadlineNotifications();
+    const now = new Date();
+
+    const oneWeekFromNow = new Date();
+    oneWeekFromNow.setDate(now.getDate() + 7);
+
+    const upcomingDeadlines = goals.filter((goal) => {
+      const deadline = new Date(goal.deadline);
+      return deadline > now && deadline <= oneWeekFromNow;
+    });
+
+    const overdueGoals = goals.filter((goal) => {
+      const deadline = new Date(goal.deadline);
+      return deadline < now && goal.status === "pending";
+    });
+
+    setNotifications([...upcomingDeadlines, ...overdueGoals]);
   }, [goals]);
 
   const fetchGoals = async () => {
@@ -60,28 +75,6 @@ function Economical() {
     }
   };
 
-  const checkDeadlineNotifications = () => {
-    const now = new Date();
-
-    // Mục tiêu sắp đến hạn trong 7 ngày
-    const oneWeekFromNow = new Date();
-    oneWeekFromNow.setDate(now.getDate() + 7);
-
-    // Mục tiêu sắp đến hạn (deadline trong tương lai <= 7 ngày)
-    const upcomingDeadlines = goals.filter((goal) => {
-      const deadline = new Date(goal.deadline);
-      return deadline > now && deadline <= oneWeekFromNow;
-    });
-
-    // Mục tiêu đã quá hạn và vẫn đang pending
-    const overdueGoals = goals.filter((goal) => {
-      const deadline = new Date(goal.deadline);
-      return deadline < now && goal.status === "pending";
-    });
-
-    // Kết hợp thông báo sắp đến hạn và quá hạn
-    setNotifications([...upcomingDeadlines, ...overdueGoals]);
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

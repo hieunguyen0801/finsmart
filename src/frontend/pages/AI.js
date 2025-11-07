@@ -1,44 +1,88 @@
 import "./AI.css";
-import { data, useNavigate } from "react-router-dom";
-import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import CryptoJS from "crypto-js";
 import supabase from "../../database/supabase";
 import { startSpeechRecognition } from "../../frontend/speech";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// 1. Khởi tạo Gemini với API Key
 const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-let user_id = 0;
+const DEFAULT_MESSAGE = {
+  sender: "bot",
+  type: "text",
+  content: "Xin chào! Tôi có thể giúp gì cho bạn?",
+};
 
-function Home() {
-  const navigate = useNavigate();
-  const handleHome = () => {
-    navigate("/home");
-  };
-}
-function Transaction() {
-  const navigate = useNavigate();
-  const handleTransaction = () => {
-    navigate("/transaction");
-  };
-}
-function Profile() {
-  const navigate = useNavigate();
-  const handleProfile = () => {
-    navigate("/profile");
-  };
-}
+const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
 
 function AI() {
-
-  const sessionId = useRef(`session-${new Date().toISOString().split("T")[0]}-${Math.floor(Math.random() * 10000)}`);
-
   const navigate = useNavigate();
+  const sessionId = useRef(
+    `session-${new Date().toISOString().split("T")[0]}-${Math.floor(
+      Math.random() * 10000
+    )}`
+  );
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
+  const [messages, setMessages] = useState([DEFAULT_MESSAGE]);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const encryptedUserId = localStorage.getItem("user_id");
+    if (!encryptedUserId || !SECRET_KEY) {
+      return;
+    }
+
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedUserId, SECRET_KEY);
+      const parsed = parseInt(bytes.toString(CryptoJS.enc.Utf8), 10);
+      if (!Number.isNaN(parsed)) {
+        setUserId(parsed);
+      }
+    } catch (error) {
+      console.error("Không thể giải mã user_id:", error);
+    }
+  }, []);
+
+  const handleCreateNewSession = useCallback(() => {
+    const sid = sessionId.current;
+    setSelectedSession({ session_id: sid });
+    setMessages([DEFAULT_MESSAGE]);
+  }, []);
+
+  useEffect(() => {
+    handleCreateNewSession();
+  }, [handleCreateNewSession]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    async function fetchSessions() {
+      const { data, error } = await supabase
+        .from("chat_history")
+        .select("session_id, created_at, title")
+        .eq("user_id", userId)
+        .order("updated_at", { ascending: false });
+
+      if (error) {
+        console.error("Fetch error:", error);
+      } else {
+        setSessions(data ?? []);
+      }
+    }
+
+    fetchSessions();
+  }, [userId]);
+
   const handleHome = () => {
     navigate("/home");
   };
@@ -58,56 +102,6 @@ function AI() {
     navigate("/statistic");
   };
 
-  const [messages, setMessages] = useState([
-    {
-      sender: "bot",
-      type: "text",
-      content: "Xin chào! Tôi có thể giúp gì cho bạn?",
-    },
-  ]);
-
-  useEffect(() => {
-    const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
-    const encryptedUserId = localStorage.getItem("user_id");
-    const bytes = CryptoJS.AES.decrypt(encryptedUserId, SECRET_KEY);
-    user_id = parseInt(bytes.toString(CryptoJS.enc.Utf8), 10);
-    console.log(user_id);
-  }, [user_id]);
-
-   // Lấy danh sách sessions
-   useEffect(() => {
-    if (!user_id) return;
-    async function fetchSessions() {
-      const { data, error } = await supabase
-        .from("chat_history")
-        .select("session_id, created_at, title")
-        .eq("user_id", user_id)
-        .order("updated_at", { ascending: false });
-
-      if (error) console.error("Fetch error:", error);
-      else setSessions(data);
-    }
-    fetchSessions();
-  }, [user_id]);
-
-    // Tạo phiên chat mới
-    useEffect(() => {
-      handleCreateNewSession();
-    }, [])
-    const handleCreateNewSession = async () => {
-      let message = {
-        sender: "bot",
-        type: "text",
-        content: "Xin chào! Tôi có thể giúp gì cho bạn?",
-      };
-
-      const sid = sessionId.current;
-
-      // Cập nhật state session mới
-      setSelectedSession({ session_id: sid });
-      setMessages([message]);
-    };
-
   return (
     <>
       <div className="bodyAI">
@@ -126,17 +120,17 @@ function AI() {
               <span className="nav-label">Giao dịch</span>
             </button>
             <button className="nav-btn eco" onClick={handlePreodic}>
-            <img src="Soucre/preodic-icon.png" alt="Tiết kiệm" />
-            <span className="nav-label">Định kỳ</span>
-          </button>
-          <button className="nav-btn eco" onClick={handleStatistic}>
-            <img src="Soucre/statistic.png" alt="Thống kê" />
-            <span className="nav-label">Thống kê</span>
-          </button>
-          <button className="nav-btn eco" onClick={handleEconomical}>
-            <img src="Soucre/economy-icon.png" alt="Tiết kiệm" />
-            <span className="nav-label">Tiết kiệm</span>
-          </button>
+              <img src="Soucre/preodic-icon.png" alt="Tiết kiệm" />
+              <span className="nav-label">Định kỳ</span>
+            </button>
+            <button className="nav-btn eco" onClick={handleStatistic}>
+              <img src="Soucre/statistic.png" alt="Thống kê" />
+              <span className="nav-label">Thống kê</span>
+            </button>
+            <button className="nav-btn eco" onClick={handleEconomical}>
+              <img src="Soucre/economy-icon.png" alt="Tiết kiệm" />
+              <span className="nav-label">Tiết kiệm</span>
+            </button>
             <button className="nav-btn AI">
               <img src="Soucre/AI.png" alt="Chatbot" />
               <span className="nav-label">Chatbot</span>
@@ -150,51 +144,59 @@ function AI() {
       </div>
       <section>
         <div className="chat_container">
-      <div className="chat-history-sessions">
-      <button 
-          className="new-session-btn"
-          onClick={handleCreateNewSession}
-        >
-          <i className="fas fa-plus"></i>
-          + Đoạn chat mới
-        </button>
-          <h4>Lịch sử Chat</h4>
-          {sessions.map((s) => (
+          <div className="chat-history-sessions">
             <button
-              key={s.session_id}
-              className={`chat-session-item ${selectedSession?.session_id === s.session_id ? "active" : ""}`}
-              onClick={() => setSelectedSession(s)}
+              className="new-session-btn"
+              onClick={handleCreateNewSession}
             >
-              <p>{s.title}</p>
-              <small>{new Date(s.created_at).toLocaleString()}</small>
+              <i className="fas fa-plus"></i>
+              + Đoạn chat mới
             </button>
-          ))}
-        </div>
-        <ChatWindow  session={selectedSession} messages={messages} setMessages={setMessages} sessionId={sessionId} />
+            <h4>Lịch sử Chat</h4>
+            {sessions.map((s) => (
+              <button
+                key={s.session_id}
+                className={`chat-session-item ${
+                  selectedSession?.session_id === s.session_id ? "active" : ""
+                }`}
+                onClick={() => setSelectedSession(s)}
+              >
+                <p>{s.title}</p>
+                <small>{new Date(s.created_at).toLocaleString()}</small>
+              </button>
+            ))}
+          </div>
+          <ChatWindow
+            session={selectedSession}
+            messages={messages}
+            setMessages={setMessages}
+            userId={userId}
+          />
         </div>
       </section>
     </>
   );
 }
 
-function ChatWindow({session, messages, setMessages, sessionId}) {
-
+function ChatWindow({ session, messages, setMessages, userId }) {
   const [questionHistory, setQuestionHistory] = useState([]);
   const [answerHistory, setAnswerHistory] = useState([]);
 
   const [transactions, setTransactions] = useState("");
   const [income, setIncome] = useState("");
   const [isListening, setIsListening] = useState(false);
-  const [suggestions, setSuggestions] = useState([
-    "Vẽ biểu đồ dự đoán tài chính của tôi sau 1 tháng",
-    "Vẽ biểu đồ dự đoán chi tiêu của tôi sau 1 tháng",
-  ]);
+  const suggestions = useMemo(
+    () => [
+      "Vẽ biểu đồ dự đoán tài chính của tôi sau 1 tháng",
+      "Vẽ biểu đồ dự đoán chi tiêu của tôi sau 1 tháng",
+    ],
+    []
+  );
 
-  
   const [inputText, setInputText] = useState("");
-  const messagesEndRef = useRef(null); // Ref đến vị trí cuối tin nhắn
+  const messagesEndRef = useRef(null);
 
-  async function analyzeUserIntent(userMessage) {
+  const analyzeUserIntent = useCallback(async (userMessage) => {
     try {
       const prompt = `
       Phân tích yêu cầu của người dùng và trả về JSON theo định dạng:
@@ -223,140 +225,53 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
         response_message: "Xin lỗi, tôi không hiểu yêu cầu của bạn",
       };
     }
-  }
+  }, []);
 
-  async function handleGoogleChat(userQuestion, questionHistory, answerHistory) {
-    const prompt = `
+  const handleGoogleChat = useCallback(
+    async (userQuestion, historyQuestions, historyAnswers) => {
+      const prompt = `
   Dữ liệu chi tiêu: ${transactions}
   Dữ liệu thu nhập: ${income}
-  Lịch sử câu hỏi trước đó ${questionHistory}
-  Lịch sử câu trả lời trước đó ${answerHistory}
+  Lịch sử câu hỏi trước đó ${historyQuestions}
+  Lịch sử câu trả lời trước đó ${historyAnswers}
 
   Câu hỏi: "${userQuestion}"
   → Hãy tổng hợp và trả lời bằng tiếng Việt.
 `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text().replace(/\*+/g, "\n").trim();
-  }
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text().replace(/\*+/g, "\n").trim();
+    },
+    [income, transactions]
+  );
 
   useEffect(() => {
+    if (!userId) return;
+
     async function getUserData() {
       const { data: transactionsData } = await supabase
         .from("transactions")
         .select("*")
-        .eq("user_id", user_id);
+        .eq("user_id", userId);
       setTransactions(JSON.stringify(transactionsData));
 
       const { data: incomeData } = await supabase
         .from("income")
         .select("*")
-        .eq("user_id", user_id);
+        .eq("user_id", userId);
       setIncome(JSON.stringify(incomeData));
     }
     getUserData();
-  }, [user_id]);
+  }, [userId]);
 
-  // Tự động cuộn khi có tin nhắn mới
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     scrollToBottom();
-  }, [messages]); // Kích hoạt khi messages thay đổi
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  async function handleSend(text = inputText) {
-    if (!text.trim()) return;
-    console.log(messages.length,messages.length === 1);
-    if (messages.length === 1) {
-      saveChatToSupabase(messages);
-      await supabase
-        .from("chat_history")
-        .update({ title: text }) // text là câu hỏi đầu tiên của user
-        .eq("session_id", session.session_id)
-        .eq("user_id", user_id);
-    }
-    // Thêm tin nhắn người dùng
-    setMessages([...messages, { sender: "user", type: "text", content: text }]);
-    setQuestionHistory([...questionHistory, text]);
-    const newMessages = [...messages, { sender: "user", type: "text", content: text }];
-
-    const analysis = await analyzeUserIntent(text);
-    if (analysis.is_prediction_request === true) {
-      if (analysis.chart_type === "transactions") {
-        setMessages([
-          ...messages,
-          { sender: "user", content: text },
-          {
-            sender: "bot",
-            type: "image",
-            content: (
-              <AiPredictTransactions
-                periods={analysis.periods}
-                message={analysis.response_message}
-              />
-            ),
-          },
-        ]);
-      } else if (String(analysis.chart_type).trim() === "financial") {
-        setMessages([
-          ...messages,
-          { sender: "user", content: text },
-          {
-            sender: "bot",
-            type: "image",
-            content: (
-              <AiPredictFinancial
-                periods={analysis.periods}
-                message={analysis.response_message}
-              />
-            ),
-          },
-        ]);
-      }
-    } else {
-      // Giả lập phản hồi từ bot (có thể thay bằng API call)
-      setTimeout(async () => {
-        let chatbotAnswer = await handleGoogleChat(text, questionHistory, answerHistory);
-        setAnswerHistory(chatbotAnswer);
-      
-        setMessages((prev) => {
-          const updated = [
-            ...prev,
-            {
-              sender: "bot",
-              type: "text",
-              content: chatbotAnswer,
-            },
-          ];
-      
-          // Lưu đúng bản cập nhật ngay tại đây!
-          let cleanedMessages = cleanMessagesBeforeSave(updated);
-          saveChatToSupabase(cleanedMessages);
-      
-          return updated;
-        });
-      }, 1000);
-      
-    }
-    
-    setInputText("");
-  }
-
-  function cleanMessagesBeforeSave(messages) {
-  return messages.map((msg) => {
-    if (msg.type === "image") {
-      return {
-        ...msg,
-        content: null, // Loại bỏ React component nếu là ảnh
-      };
-    }
-    return msg;
-  });
-}
-
+  }, [messages, scrollToBottom]);
 
   const handleVoiceInput = () => {
     setIsListening(true);
@@ -368,72 +283,150 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
     );
   };
 
+  const saveChatToSupabase = useCallback(
+    async (newMessages) => {
+      if (!userId || !session?.session_id) return;
+
+      const { error } = await supabase
+        .from("chat_history")
+        .upsert(
+          {
+            user_id: userId,
+            session_id: session.session_id,
+            messages: newMessages,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: ["user_id", "session_id"] }
+        );
+
+      if (error) console.error("Lỗi lưu lịch sử chat:", error);
+    },
+    [session, userId]
+  );
+
+  const cleanMessagesBeforeSave = useCallback((items) => {
+    return items.map((msg) => {
+      if (msg.type === "image") {
+        return {
+          ...msg,
+          content: null,
+        };
+      }
+      return msg;
+    });
+  }, []);
+
+  const handleSend = async (text = inputText) => {
+    if (!text.trim()) return;
+    if (!session?.session_id || !userId) return;
+
+    const updatedQuestions = [...questionHistory, text];
+    setQuestionHistory(updatedQuestions);
+
+    const userMessage = { sender: "user", type: "text", content: text };
+    setMessages((prev) => [...prev, userMessage]);
+
+    const analysis = await analyzeUserIntent(text);
+    if (analysis.is_prediction_request === true) {
+      const botMessageContent =
+        analysis.chart_type === "transactions" ? (
+          <AiPredictTransactions
+            periods={analysis.periods}
+            message={analysis.response_message}
+            userId={userId}
+          />
+        ) : analysis.chart_type?.trim() === "financial" ? (
+          <AiPredictFinancial
+            periods={analysis.periods}
+            message={analysis.response_message}
+            userId={userId}
+          />
+        ) : null;
+
+      if (botMessageContent) {
+        setMessages((prev) => {
+          const updated = [
+            ...prev,
+            { sender: "bot", type: "image", content: botMessageContent },
+          ];
+          saveChatToSupabase(cleanMessagesBeforeSave(updated));
+          return updated;
+        });
+      }
+    } else {
+      if (messages.length === 1) {
+        await supabase
+          .from("chat_history")
+          .update({ title: text })
+          .eq("session_id", session.session_id)
+          .eq("user_id", userId);
+      }
+
+      setTimeout(async () => {
+        const chatbotAnswer = await handleGoogleChat(
+          text,
+          updatedQuestions,
+          answerHistory
+        );
+        setAnswerHistory((prev) => [...prev, chatbotAnswer]);
+
+        setMessages((prev) => {
+          const updated = [
+            ...prev,
+            {
+              sender: "bot",
+              type: "text",
+              content: chatbotAnswer,
+            },
+          ];
+          saveChatToSupabase(cleanMessagesBeforeSave(updated));
+          return updated;
+        });
+      }, 1000);
+    }
+
+    setInputText("");
+  };
+
   useEffect(() => {
-    if (!session) return;
+    if (!session?.session_id || !userId) return;
 
     async function fetchSessionMessages() {
-      if (!session || !session.session_id) {
-        console.warn(" session không hợp lệ:", session);
-        return;
-      }
-    
       const { data, error } = await supabase
         .from("chat_history")
         .select("messages")
         .eq("session_id", session.session_id)
+        .eq("user_id", userId)
         .maybeSingle();
-    
+
       if (error) {
-        console.error(" Lỗi Supabase:", error.message);
+        console.error("Lỗi Supabase:", error.message);
         return;
       }
-    
+
       if (!data) {
-        console.warn("Không có dữ liệu cho session:", session.session_id);
         return;
       }
-    
-      const loadedMessages = data.messages;
 
-    // Phân loại lịch sử
-    const qHistory = loadedMessages
-      .filter((msg) => msg.sender === "user" && msg.type === "text")
-      .map((msg) => msg.content);
+      const loadedMessages = data.messages || [];
+      const qHistory = loadedMessages
+        .filter((msg) => msg.sender === "user" && msg.type === "text")
+        .map((msg) => msg.content);
 
-    const aHistory = loadedMessages
-      .filter((msg) => msg.sender === "bot" && msg.type === "text")
-      .map((msg) => msg.content);
+      const aHistory = loadedMessages
+        .filter((msg) => msg.sender === "bot" && msg.type === "text")
+        .map((msg) => msg.content);
 
-    setMessages(loadedMessages);
-    setQuestionHistory(qHistory);
-    setAnswerHistory(aHistory);
+      setMessages(loadedMessages.length ? loadedMessages : [DEFAULT_MESSAGE]);
+      setQuestionHistory(qHistory);
+      setAnswerHistory(aHistory);
     }
 
     fetchSessionMessages();
-  }, [session]);
-
-  async function saveChatToSupabase(newMessages) {
-    if (!user_id) return;
-  
-    const { error } = await supabase
-      .from("chat_history")
-      .upsert(
-        {
-          user_id: user_id,
-          session_id: session.session_id,
-          messages: newMessages,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: ["user_id", "session_id"] }
-      );
-  
-    if (error) console.error("Lỗi lưu lịch sử chat:", error);
-  }
-  
+  }, [session, setMessages, userId]);
 
   return (
     <div className="chat-window">
-      {/* Phần tin nhắn (cuộn độc lập) */}
       <div className="messages-container">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}-message`}>
@@ -441,14 +434,13 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
             <div className="text">{msg.content}</div>
           </div>
         ))}
-        <div ref={messagesEndRef} /> {/* Marker cuối danh sách */}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Phần gợi ý câu hỏi */}
       <div className="suggestions-container">
-        {suggestions.map((suggestion, index) => (
+        {suggestions.map((suggestion) => (
           <div
-            key={index}
+            key={suggestion}
             className="suggestion-bubble"
             onClick={() => {
               handleSend(suggestion);
@@ -458,7 +450,7 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
           </div>
         ))}
       </div>
-      {/* Phần input (cố định ở dưới) */}
+
       <div className="input-area">
         <div className="chat-input">
           {isListening ? (
@@ -484,9 +476,8 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
-                // Kiểm tra phím Enter (không giữ Shift)
-                e.preventDefault(); // Ngăn xuống dòng nếu là textarea
-                handleSend(); // Gọi hàm gửi tin nhắn
+                e.preventDefault();
+                handleSend();
               }
             }}
             className="chat-input-box"
@@ -498,6 +489,7 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
               width="25"
               height="30"
               className="chat-icon"
+              alt="Gửi tin nhắn"
             />
           </button>
         </div>
@@ -506,18 +498,19 @@ function ChatWindow({session, messages, setMessages, sessionId}) {
   );
 }
 
-function AiPredictFinancial({ periods, message }) {
+function AiPredictFinancial({ periods, message, userId }) {
   const [imageData, setImageData] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
+    if (!userId) return;
+
     async function getPredictions() {
       try {
         const response = await fetch(
-          `http://localhost:5000/predict/financial?user_id=${user_id}&periods=${periods}&full_data=${"false"}`
+          `http://localhost:5000/predict/financial?user_id=${userId}&periods=${periods}&full_data=${"false"}`
         );
 
-        // Kiểm tra status code
         if (!response.ok) {
           const errorData = await response.json();
           setErrorMessage(errorData.message || "Lỗi không xác định từ server");
@@ -532,7 +525,7 @@ function AiPredictFinancial({ periods, message }) {
       }
     }
     getPredictions();
-  }, []);
+  }, [periods, userId]);
 
   return (
     <div>
@@ -557,18 +550,19 @@ function AiPredictFinancial({ periods, message }) {
   );
 }
 
-function AiPredictTransactions({ periods, message }) {
+function AiPredictTransactions({ periods, message, userId }) {
   const [imageData, setImageData] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
+    if (!userId) return;
+
     async function getPredictions() {
       try {
         const response = await fetch(
-          `http://localhost:5000/predict/transactions?user_id=${user_id}&periods=${periods}&full_data=${"false"}`
+          `http://localhost:5000/predict/transactions?user_id=${userId}&periods=${periods}&full_data=${"false"}`
         );
 
-        // Kiểm tra status code
         if (!response.ok) {
           const errorData = await response.json();
           setErrorMessage(errorData.message || "Lỗi không xác định từ server");
@@ -583,7 +577,7 @@ function AiPredictTransactions({ periods, message }) {
       }
     }
     getPredictions();
-  }, []);
+  }, [periods, userId]);
 
   return (
     <div>

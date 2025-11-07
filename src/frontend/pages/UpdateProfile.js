@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import "./UpdateProfile.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../database/supabase";
 import CryptoJS from "crypto-js";
-import bcrypt from "bcryptjs";
 
 const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
 
@@ -54,7 +52,7 @@ function UpdateProfile() {
       return;
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("users")
       .update(updates)
       .eq("user_id", userId)

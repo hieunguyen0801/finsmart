@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import CryptoJS from "crypto-js";
 import supabase from "../../database/supabase";
 import { Pie, Bar, Line } from "react-chartjs-2";
-import Chart from "chart.js/auto";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCalendarAlt } from "react-icons/fa";

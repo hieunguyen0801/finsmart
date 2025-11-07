@@ -1,17 +1,11 @@
 import "./Preodic.css";
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CryptoJS from "crypto-js";
 import supabase from "../../database/supabase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
-const encryptedUserId = localStorage.getItem("user_id");
-let user_id = 0;
-if (encryptedUserId) {
-  const bytes = CryptoJS.AES.decrypt(encryptedUserId, SECRET_KEY);
-  user_id = parseInt(bytes.toString(CryptoJS.enc.Utf8), 10);
-}
 
 function Preodic() {
   const navigate = useNavigate();
@@ -34,8 +28,8 @@ function Preodic() {
     navigate("/statistic");
   };
 
-  const [balance, setBalance] = useState(0);
-  const [wallet_id, setWalletId] = useState(0);
+  const [userId, setUserId] = useState(null);
+  const [walletId, setWalletId] = useState(0);
 
   const [periodicData, setPeriodicData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,6 +52,23 @@ function Preodic() {
   // Xử lý nút Add
   const handleAdd = () => setShowForm(true);
 
+  useEffect(() => {
+    const encryptedUserId = localStorage.getItem("user_id");
+    if (!encryptedUserId || !SECRET_KEY) {
+      return;
+    }
+
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedUserId, SECRET_KEY);
+      const parsed = parseInt(bytes.toString(CryptoJS.enc.Utf8), 10);
+      if (!Number.isNaN(parsed)) {
+        setUserId(parsed);
+      }
+    } catch (err) {
+      console.error("Không thể giải mã user_id:", err);
+    }
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setNewPeriodic((prev) => ({
@@ -77,13 +88,18 @@ function Preodic() {
         startDate,
         newPeriodic.frequency
       );
+      if (!userId || !walletId) {
+        alert("Không thể xác định người dùng hoặc ví.");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("preodic")
         .insert([
           {
             ...newPeriodic,
-            user_id,
-            wallet_id, // Thay bằng wallet_id thực tế của user
+            user_id: userId,
+            wallet_id: walletId,
             amount: Number(newPeriodic.amount),
             startDate: new Date(newPeriodic.startDate)
               .toISOString()
@@ -226,7 +242,6 @@ function Preodic() {
   };
 
   const calculateNextExecution = (startDate, frequency) => {
-    const now = new Date();
     let date = new Date(startDate);
 
     // Xử lý trường hợp ngày không hợp lệ
@@ -254,12 +269,16 @@ function Preodic() {
       case "Hàng năm":
         date.setFullYear(date.getFullYear() + 1);
         break;
+      default:
+        break;
     }
 
     return date.toISOString(); // Trả về cả ngày và giờ
   };
 
-  const processPeriodicTransactions = async () => {
+  const processPeriodicTransactions = useCallback(async () => {
+    if (!userId) return;
+
     const nowISO = new Date().toISOString(); // Lấy cả giờ phút hiện tại
 
     // Lấy danh sách các định kỳ cần xử lý
@@ -302,7 +321,7 @@ function Preodic() {
       await supabase.from("transactions").insert([
         {
           created_at: new Date().toISOString(),
-          user_id: user_id,
+          user_id: userId,
           wallet_id: item.wallet_id,
           category: item.name_preodic || item.name, // lấy tên định kỳ
           amount: item.amount,
@@ -335,7 +354,7 @@ function Preodic() {
         continue;
       }
     }
-  };
+  }, [userId]);
 
   const [filterStatus, setFilterStatus] = useState("all"); // 'all', 'active', 'inactive'
   const filteredData = periodicData.filter((item) => {
@@ -366,11 +385,15 @@ function Preodic() {
   };
 
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
     const fetchWallet = async () => {
       const { data, error } = await supabase
         .from("wallets")
         .select("*")
-        .eq("user_id", user_id)
+        .eq("user_id", userId)
         .single();
 
       if (error) {
@@ -378,7 +401,6 @@ function Preodic() {
         return null;
       }
 
-      setBalance(data.balance);
       setWalletId(data.wallet_id);
 
       return data;
@@ -392,7 +414,7 @@ function Preodic() {
           .select(
             "id, name_preodic, amount, frequency, startDate, endDate, is_active"
           )
-          .eq("user_id", user_id)
+          .eq("user_id", userId)
           .order("created_at", { ascending: false });
 
         if (error) throw error;
@@ -417,9 +439,11 @@ function Preodic() {
       }
     };
     fetchPeriodicData();
-  }, [user_id]);
+  }, [userId]);
 
   useEffect(() => {
+    if (!userId) return;
+
     // Chạy lần đầu khi component mount
     processPeriodicTransactions();
 
@@ -429,7 +453,7 @@ function Preodic() {
     }, 24 * 60 * 60 * 1000); // 24 giờ
 
     return () => clearInterval(interval);
-  }, []);
+  }, [processPeriodicTransactions, userId]);
 
   // Trong useEffect hoặc sau khi fetch periodicData:
   useEffect(() => {
