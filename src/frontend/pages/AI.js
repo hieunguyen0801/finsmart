@@ -5,7 +5,7 @@ import CryptoJS from "crypto-js";
 import supabase from "../../database/supabase";
 import { startSpeechRecognition } from "../../frontend/speech";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "../../shared/lib/generativeAI";
 
 // 1. Khởi tạo Gemini với API Key
 const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API);

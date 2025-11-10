@@ -10,7 +10,7 @@ import { useAuth } from "../shared/hooks";
 import { useAddTransaction } from "../features/transaction-add";
 import { incomeCategories, expenseCategories, TRANSACTION_TYPES } from "../shared/config";
 import { startSpeechRecognition } from "../frontend/speech";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "../shared/lib/generativeAI";
 
 const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });

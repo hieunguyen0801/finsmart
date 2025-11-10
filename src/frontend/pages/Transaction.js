@@ -4,7 +4,7 @@ import "./Transaction.css";
 import CryptoJS from "crypto-js";
 import supabase from "../../database/supabase";
 import { startSpeechRecognition } from "../../frontend/speech";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "../../shared/lib/generativeAI";
 
 const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
 const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API);
